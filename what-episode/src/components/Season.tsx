@@ -1,24 +1,33 @@
 import {Season as ISeason} from '../models/series'
-import {useState} from "react"
+import {useContext} from "react"
+import {SeriesContext} from "../context/series.context.ts";
 
 interface SeasonProps {
     season: ISeason
+    seriesId: number
 }
 
-export function Season(props: SeasonProps) {
-    const [season, setSeason] = useState(props.season)
+export function Season({season, seriesId}: SeasonProps) {
+    const {dispatchSeries} = useContext(SeriesContext)
 
     const incrementCurrentEpisode = () => {
-        setSeason({
-            ...season,
-            currentEpisode: (season.currentEpisode ?? 0) + 1,
+        const currentEpisode = (season.currentEpisode ?? 0) + 1
+        dispatchSeries({
+            type: "updateCurrentEpisode",
+            seasonId: season.seasonId,
+            seriesId: seriesId,
+            newValue: currentEpisode,
         })
     }
 
     const decrementCurrentEpisode = () => {
-        setSeason({
-            ...season,
-            currentEpisode: season.currentEpisode == null || season.currentEpisode === 0 ? 0 : season.currentEpisode - 1,
+        const currentEpisode = season.currentEpisode == null || season.currentEpisode === 0 ? 0 : season.currentEpisode - 1
+
+        dispatchSeries({
+            type: "updateCurrentEpisode",
+            seasonId: season.seasonId,
+            seriesId: seriesId,
+            newValue: currentEpisode,
         })
     }
 
@@ -31,7 +40,7 @@ export function Season(props: SeasonProps) {
     }
 
     return (
-        <div>
+        <div className="season">
             <span>I am season with {season.episodeCount} episodes</span>
             <span>You have watched {season.currentEpisode ?? 0} episodes</span>
             <button disabled={disableIncrementButton()} onClick={incrementCurrentEpisode}>+</button>
