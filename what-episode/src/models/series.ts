@@ -8,4 +8,5 @@ export interface Season {
 export interface Series {
     title: string
     seasons: Season[]
+    seriesId: number;
 }
