@@ -2,27 +2,21 @@ import logo from './assets/logo.svg';
 import './App.css';
 import {Series} from "./components/Series";
 import {Series as ISeries} from "./models/series.ts";
-import {useReducer} from "react";
+import {useEffect, useReducer} from "react";
 import {seriesReducer} from "./reducers/series.reducer.ts";
 import {SeriesContext} from "./context/series.context.ts";
+import {useLocalStorage} from "./hooks/local-storage.hook.ts";
 
 function App() {
+    const [initialSeries, persistSeries] = useLocalStorage<ISeries[]>("series", []);
+
     const [series, dispatchSeries] = useReducer(seriesReducer, {
-        series: [{
-            seriesId: 0,
-            seasons: [
-                {seasonId: 0, episodeCount: 3},
-                {seasonId: 1, episodeCount: 5},
-            ],
-            title: 'Kackserie',
-        }, {
-            seriesId: 1,
-            seasons: [
-                {seasonId: 0, episodeCount: 20},
-            ],
-            title: 'Schmackserie',
-        }],
+        series: initialSeries,
     })
+
+    useEffect(() => {
+        persistSeries(series.series)
+    }, [series])
 
     return (
         <div className="App">
