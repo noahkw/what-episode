@@ -5,10 +5,14 @@ import { useContext, useState } from "react"
 import { SeriesContext } from "../context/series.context.ts"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBan, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { UndoableButton } from "./UndoableButton.tsx"
+
+const UNDO_DELAY = 5000
 
 export function Series({ series }: { series: ISeries }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const { dispatchSeries } = useContext(SeriesContext)
+  const [isBeingDeleted, setIsBeingDeleted] = useState(false)
 
   function addSeason() {
     dispatchSeries({
@@ -31,6 +35,14 @@ export function Series({ series }: { series: ISeries }) {
       type: "delete",
       seriesId: series.seriesId,
     })
+  }
+
+  function startDeletion() {
+    setIsBeingDeleted(true)
+
+    setTimeout(() => {
+      setIsBeingDeleted(false)
+    }, UNDO_DELAY)
   }
 
   const children =
@@ -72,9 +84,16 @@ export function Series({ series }: { series: ISeries }) {
           <button className="btn btn-primary btn-icon" onClick={addSeason}>
             <FontAwesomeIcon icon={faPlus} />
           </button>
-          <button className="btn btn-secondary btn-icon" onClick={deleteSeries}>
-            <FontAwesomeIcon icon={faBan} />
-          </button>
+          <UndoableButton
+            timeout={UNDO_DELAY}
+            icon={faBan}
+            callback={deleteSeries}
+            undoCallback={() => {
+              setIsBeingDeleted(false)
+            }}
+            onClick={startDeletion}
+            undoMessage={`Series ${series.title} is being deleted...`}
+          />
         </div>
       </div>
 

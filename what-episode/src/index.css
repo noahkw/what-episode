@@ -27,3 +27,10 @@
 .btn-icon {
     @apply w-8 h-8 btn-sm;
 }
+
+.alert-bottom {
+    width: calc(100% - 20px);
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
