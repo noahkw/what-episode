@@ -1,7 +1,11 @@
 module.exports = {
-  content: ["./src/**/*.{ts,tsx}", "./index.html"],
+  content: [
+    "./src/**/*.{ts,tsx}",
+    "./index.html",
+    require.resolve("react-widgets/styles.css"),
+  ],
   theme: {
     extend: {},
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"), require("react-widgets-tailwind")],
 }

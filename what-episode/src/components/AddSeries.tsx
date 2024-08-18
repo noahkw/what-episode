@@ -1,5 +1,6 @@
-import { ChangeEvent, Dispatch, FormEvent, useEffect, useState } from "react"
+import { Dispatch, FormEvent, useEffect, useState } from "react"
 import { SeriesAction } from "../reducers/series.reducer.ts"
+import { Combobox } from "react-widgets/cjs/index"
 
 interface ImageResult {
   medium: string
@@ -16,7 +17,7 @@ interface TVShowResult {
 
 interface SeasonResult {
   id: number
-  episodeOrder: number
+  episodeOrder: number | null
   image: ImageResult
 }
 
@@ -35,7 +36,7 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
       if (query.trim()) {
         void fetchShows()
       }
-    }, 500)
+    }, 2000)
 
     return () => {
       clearTimeout(handler)
@@ -108,7 +109,7 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
       const seasons = await fetchSeasons(show)
 
       if (!seasons) {
-        alert("kakete")
+        alert("Failed loading seasons... :(")
         return
       }
 
@@ -117,10 +118,11 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
         series: {
           title: show.show.name,
           imageUrl: show.show.image.medium,
-          seriesId: show.show.id.toString(),
+          seriesId: crypto.randomUUID(),
           seasons: seasons.map(season => ({
             seasonId: season.id.toString(),
-            episodeCount: season.episodeOrder,
+            episodeCount: season.episodeOrder ?? 0,
+            currentEpisode: 0,
           })),
         },
       })
@@ -132,27 +134,24 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
   return (
     <div>
       <form className="input-group" onSubmit={onSubmit}>
-        <input
-          required
-          className="input w-24 md:w-32 input-sm"
-          type="text"
+        <Combobox
+          busy={isLoading}
+          data={shows}
           value={query}
-          placeholder="New series..."
-          onChange={e => {
-            setQuery(e.target.value)
+          filter={() => true}
+          onChange={value => {
+            if (typeof value === "string") {
+              setQuery(value)
+            } else {
+              void setShow(value.show.id)
+            }
           }}
-        />
-        <select
-          onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-            void setShow(parseInt(event.target.value))
-          }}
-        >
-          {shows.map(item => (
-            <option key={item.show.id} value={item.show.id}>
-              {`${item.show.name} (${item.show.premiered?.substring(0, 4) ?? "N/A"})`}
-            </option>
-          ))}
-        </select>
+          renderListItem={({ item }) => (
+            <span>
+              {item.show.name} ({item.show.premiered?.substring(0, 4) ?? "N/A"})
+            </span>
+          )}
+        ></Combobox>
         <button className="btn btn-primary btn-sm" type="submit">
           Add
         </button>

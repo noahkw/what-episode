@@ -1,6 +1,6 @@
 export interface Season {
   episodeCount: number
-  currentEpisode?: number
+  currentEpisode: number
   seasonId: string
 }
 

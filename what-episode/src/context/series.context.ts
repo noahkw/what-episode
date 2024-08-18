@@ -7,6 +7,6 @@ interface SeriesContextType {
 
 export const SeriesContext = createContext<SeriesContextType>({
   dispatchSeries: () => {
-    console.log("I am useless")
+    console.log("dispatchSeries has not been set yet")
   },
 })
