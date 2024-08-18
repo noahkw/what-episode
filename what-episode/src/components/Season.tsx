@@ -4,6 +4,7 @@ import { SeriesContext } from "../context/series.context.ts"
 import { EditableSpan } from "./EditableSpan.tsx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faEye } from "@fortawesome/free-regular-svg-icons"
 
 interface SeasonProps {
   season: ISeason
@@ -77,6 +78,14 @@ export function Season({ season, seriesId, index }: SeasonProps) {
 
   return (
     <div className="season flex items-center gap-1">
+      <button
+        className={`btn btn-icon ${season.currentEpisode === season.episodeCount ? "color-green" : ""}`}
+        onClick={() => {
+          setCurrentEpisode(season.episodeCount)
+        }}
+      >
+        <FontAwesomeIcon icon={faEye} />
+      </button>
       <span className="w-24">Season {index + 1}:</span>
       <EditableSpan
         initialValue={season.currentEpisode ?? 0}

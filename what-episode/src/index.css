@@ -34,3 +34,7 @@
     bottom: 10px;
     left: 10px;
 }
+
+.color-green {
+    color: oklch(var(--su));
+}
