@@ -8,4 +8,5 @@ export interface Series {
   title: string
   seasons: Season[]
   seriesId: string
+  imageUrl: string | null
 }

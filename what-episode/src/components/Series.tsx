@@ -70,7 +70,7 @@ export function Series({ series }: { series: ISeries }) {
         <figure className="lg:col-span-1 md:col-span-2 col-span-3 h-32 items-center rounded-l-lg">
           <img
             className="h-full"
-            src="https://static.tvmaze.com/uploads/images/medium_portrait/24/60927.jpg"
+            src={series.imageUrl ?? "https://placehold.co/180x320"}
             alt={series.title}
           />
         </figure>
