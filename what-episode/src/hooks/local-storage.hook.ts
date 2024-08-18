@@ -6,7 +6,7 @@ export function useLocalStorage<T>(
 ): [T, (value: T) => void] {
   const storedValue = localStorage.getItem(key)
   const [value, setValue] = useState(
-    storedValue ? JSON.parse(storedValue) : defaultValue,
+    storedValue ? (JSON.parse(storedValue) as T) : defaultValue,
   )
 
   const updateValue = (value: T): void => {

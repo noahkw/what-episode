@@ -8,9 +8,14 @@ import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons"
 interface SeasonProps {
   season: ISeason
   seriesId: Series["seriesId"]
+  index: number
 }
 
-export function Season({ season, seriesId }: SeasonProps) {
+function minMax(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max)
+}
+
+export function Season({ season, seriesId, index }: SeasonProps) {
   const { dispatchSeries } = useContext(SeriesContext)
 
   const incrementCurrentEpisode = () => {
@@ -65,13 +70,14 @@ export function Season({ season, seriesId }: SeasonProps) {
       seriesId: seriesId,
       season: {
         ...season,
-        currentEpisode,
+        currentEpisode: minMax(currentEpisode, 0, season.episodeCount),
       },
     })
   }
 
   return (
-    <div className="season">
+    <div className="season flex items-center gap-1">
+      <span className="w-24">Season {index + 1}:</span>
       <EditableSpan
         initialValue={season.currentEpisode ?? 0}
         onValueChange={setCurrentEpisode}

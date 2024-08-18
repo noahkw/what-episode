@@ -6,22 +6,23 @@ import {
 
 interface ToggleButtonProps {
   toggled: boolean
-  setToggled: (toggled: boolean) => void
+  setToggled?: (toggled: boolean) => void
 }
 
 export function ToggleButton({ toggled, setToggled }: ToggleButtonProps) {
   const toggleButton = () => {
-    setToggled(!toggled)
+    if (setToggled) {
+      setToggled(!toggled)
+    }
   }
 
   return (
-    <button className="btn btn-sm" onClick={toggleButton}>
-      {" "}
+    <button className="btn btn-icon" onClick={toggleButton}>
       {toggled ? (
         <FontAwesomeIcon icon={faChevronDown} />
       ) : (
         <FontAwesomeIcon icon={faChevronRight} />
-      )}{" "}
+      )}
     </button>
   )
 }

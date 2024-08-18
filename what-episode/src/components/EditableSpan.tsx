@@ -44,6 +44,8 @@ export function EditableSpan<T extends { toString: () => string }>({
       autoFocus
     />
   ) : (
-    <span onClick={handleClick}>{initialValue.toString()}</span>
+    <span className="w-8" onClick={handleClick}>
+      {initialValue.toString()}
+    </span>
   )
 }

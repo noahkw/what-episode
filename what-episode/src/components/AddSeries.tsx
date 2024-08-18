@@ -11,6 +11,10 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
   const onSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault()
 
+    if (!seriesName) {
+      return
+    }
+
     dispatchSeries({
       type: "create",
       series: {
@@ -22,9 +26,10 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form className="input-group" onSubmit={onSubmit}>
       <input
-        className="input input-sm"
+        required
+        className="input w-24 md:w-32 input-sm"
         type="text"
         value={seriesName}
         placeholder="New series..."

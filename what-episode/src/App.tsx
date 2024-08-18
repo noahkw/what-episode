@@ -28,12 +28,12 @@ function App() {
         <img src={logo} className="logo" alt="logo" />
         <h1 className="h-full text-2xl hidden md:block">What Episode?!</h1>
         <div className="flex-1"></div>
-        <div className="add-series-container">
+        <div className="add-series-container ">
           <AddSeries dispatchSeries={dispatchSeries} />
         </div>
       </header>
       <div className="bg-primary-content h-full">
-        <div className="flex flex-col gap-1 items-center h-full">
+        <div className="flex flex-col gap-1 items-center h-full overflow-y-auto pb-32">
           Total episodes watched:
           {seriesState.series.reduce((prev, cur) => {
             return (
