@@ -4,29 +4,29 @@ interface SeriesState {
     series: Series[]
 }
 
-type UpdateSeriesAction = {
+interface UpdateSeriesAction {
     type: "update"
     series: Series
 }
 
-type CreateSeriesAction = {
+interface CreateSeriesAction {
     type: "create"
     series: Series
 }
 
-type DeleteSeriesAction = {
+interface DeleteSeriesAction {
     type: "delete"
     seriesId: Series["seriesId"]
 }
 
-type UpdateCurrentEpisodeAction = {
+interface UpdateCurrentEpisodeAction {
     type: "updateCurrentEpisode"
     seriesId: Series["seriesId"]
     seasonId: Season["seasonId"]
     newValue: number
 }
 
-type UpdateSeason = {
+interface UpdateSeason {
     type: "updateSeason"
     seriesId: Series["seriesId"]
     season: Season

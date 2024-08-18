@@ -24,6 +24,13 @@ export function Series({series}: {
         })
     }
 
+    function deleteSeries() {
+        dispatchSeries({
+            type: 'delete',
+            seriesId: series.seriesId,
+        })
+    }
+
     return (
         <div className="series">
             <span>{series.title}</span>
@@ -36,6 +43,7 @@ export function Series({series}: {
                     })
             }
             <button onClick={addSeason}>Add season</button>
+            <button onClick={deleteSeries}>-</button>
         </div>
     )
 }
