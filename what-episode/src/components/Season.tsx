@@ -2,6 +2,8 @@ import { Season as ISeason, Series } from "../models/series"
 import { useContext } from "react"
 import { SeriesContext } from "../context/series.context.ts"
 import { EditableSpan } from "./EditableSpan.tsx"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons"
 
 interface SeasonProps {
   season: ISeason
@@ -57,27 +59,43 @@ export function Season({ season, seriesId }: SeasonProps) {
     })
   }
 
+  function setCurrentEpisode(currentEpisode: number) {
+    dispatchSeries({
+      type: "updateSeason",
+      seriesId: seriesId,
+      season: {
+        ...season,
+        currentEpisode,
+      },
+    })
+  }
+
   return (
     <div className="season">
-      <span>I am a season with episodes</span>
+      <EditableSpan
+        initialValue={season.currentEpisode ?? 0}
+        onValueChange={setCurrentEpisode}
+        parseValue={(value: string) => Number.parseInt(value)}
+      />
+      <span>/</span>
       <EditableSpan
         initialValue={season.episodeCount}
         onValueChange={setEpisodeCount}
         parseValue={(value: string) => Number.parseInt(value)}
       />
-      <span>episodes</span>
-      <span>You have watched {season.currentEpisode ?? 0} episodes</span>
       <button
+        className="btn"
         disabled={disableIncrementButton()}
         onClick={incrementCurrentEpisode}
       >
-        +
+        <FontAwesomeIcon icon={faPlus} />
       </button>
       <button
+        className="btn"
         disabled={disableDecrementButton()}
         onClick={decrementCurrentEpisode}
       >
-        -
+        <FontAwesomeIcon icon={faMinus} />
       </button>
     </div>
   )

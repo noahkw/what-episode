@@ -1,3 +1,9 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {
+  faChevronDown,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons"
+
 interface ToggleButtonProps {
   toggled: boolean
   setToggled: (toggled: boolean) => void
@@ -9,9 +15,13 @@ export function ToggleButton({ toggled, setToggled }: ToggleButtonProps) {
   }
 
   return (
-    <button className="toggle-button" onClick={toggleButton}>
+    <button className="btn btn-sm" onClick={toggleButton}>
       {" "}
-      {toggled ? "v" : ">"}{" "}
+      {toggled ? (
+        <FontAwesomeIcon icon={faChevronDown} />
+      ) : (
+        <FontAwesomeIcon icon={faChevronRight} />
+      )}{" "}
     </button>
   )
 }

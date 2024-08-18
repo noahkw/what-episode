@@ -24,13 +24,17 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
   return (
     <form onSubmit={onSubmit}>
       <input
+        className="input input-sm"
         type="text"
         value={seriesName}
+        placeholder="New series..."
         onChange={e => {
           setSeriesName(e.target.value)
         }}
       />
-      <button type="submit">Add</button>
+      <button className="btn btn-primary btn-sm" type="submit">
+        Add
+      </button>
     </form>
   )
 }

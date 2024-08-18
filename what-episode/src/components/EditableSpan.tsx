@@ -33,6 +33,7 @@ export function EditableSpan<T extends { toString: () => string }>({
 
   return isEditing ? (
     <input
+      className="outline-none bg-0 px-1 w-8 border-0 border-b-1"
       type="text"
       value={value}
       onChange={handleChange}
@@ -43,6 +44,6 @@ export function EditableSpan<T extends { toString: () => string }>({
       autoFocus
     />
   ) : (
-    <span onClick={handleClick}>{value}</span>
+    <span onClick={handleClick}>{initialValue.toString()}</span>
   )
 }

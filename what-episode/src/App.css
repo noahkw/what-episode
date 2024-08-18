@@ -1,8 +1,7 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+  max-width: 1800px;
 }
 
 .logo {
@@ -15,19 +14,8 @@
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
 
-.card {
-  padding: 2em;
-}
-
-.toggle-button {
-  color: blue;
-}
-
-.season {
-  display: flex;
-  gap: 1em;
+.add-series-container {
+  height: fit-content;
+  align-self: center;
 }

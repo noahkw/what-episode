@@ -23,12 +23,17 @@ function App() {
   }, [persistSeries, seriesState.series])
 
   return (
-    <div className="App">
-      <header className="header">
+    <div className="App h-screen overflow-hidden">
+      <header className="flex flex-row header bg-primary-content px-10 items-center">
         <img src={logo} className="logo" alt="logo" />
-        <AddSeries dispatchSeries={dispatchSeries} />
-        <div>My Series</div>
-        <div>
+        <h1 className="h-full text-2xl hidden md:block">What Episode?!</h1>
+        <div className="flex-1"></div>
+        <div className="add-series-container">
+          <AddSeries dispatchSeries={dispatchSeries} />
+        </div>
+      </header>
+      <div className="bg-primary-content h-full">
+        <div className="flex flex-col gap-1 items-center h-full">
           Total episodes watched:
           {seriesState.series.reduce((prev, cur) => {
             return (
@@ -38,14 +43,13 @@ function App() {
               }, 0)
             )
           }, 0)}
+          <SeriesContext.Provider value={{ dispatchSeries }}>
+            {seriesState.series.map((s: ISeries) => (
+              <Series key={s.seriesId} series={s}></Series>
+            ))}
+          </SeriesContext.Provider>
         </div>
-
-        <SeriesContext.Provider value={{ dispatchSeries }}>
-          {seriesState.series.map((s: ISeries) => (
-            <Series key={s.seriesId} series={s}></Series>
-          ))}
-        </SeriesContext.Provider>
-      </header>
+      </div>
     </div>
   )
 }
