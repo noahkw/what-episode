@@ -1,30 +1,41 @@
 import {Series as ISeries} from '../models/series'
 import {Season} from "./Season"
 import {ToggleButton} from "./ToggleButton"
-import {useState} from "react"
+import {useContext, useState} from "react"
+import {SeriesContext} from "../context/series.context.ts";
 
 
 export function Series({series}: {
     series: ISeries,
 }) {
     const [isExpanded, setIsExpanded] = useState(false);
-    // const [seriesState, setSeriesState] = useArrayIdStorage(value, setValue, series.seriesId, (series: ISeries) => series.seriesId, series)
+    const {dispatchSeries} = useContext(SeriesContext)
 
-    function saveSeries() {
-        // console.log('seriesState', seriesState)
-        // setSeriesState({...seriesState, title: seriesState.title + 'a'})
+    function addSeason() {
+        dispatchSeries({
+            type: 'update',
+            series: {
+                ...series,
+                seasons: [...series.seasons, {
+                    seasonId: crypto.randomUUID(),
+                    episodeCount: 0,
+                }]
+            }
+        })
     }
 
     return (
         <div className="series">
             <span>{series.title}</span>
             <ToggleButton toggled={isExpanded} setToggled={setIsExpanded}></ToggleButton>
-            {!isExpanded
-                ? null
-                : series.seasons.map(season => {
-                    return <Season key={season.seasonId} seriesId={series.seriesId} season={season}></Season>
-                })}
-            <button onClick={saveSeries}>Save</button>
+            {
+                !isExpanded
+                    ? null
+                    : series.seasons.map(season => {
+                        return <Season key={season.seasonId} seriesId={series.seriesId} season={season}></Season>
+                    })
+            }
+            <button onClick={addSeason}>Add season</button>
         </div>
     )
 }

@@ -2,11 +2,11 @@
 export interface Season {
     episodeCount: number;
     currentEpisode?: number;
-    seasonId: number;
+    seasonId: string;
 }
 
 export interface Series {
     title: string
     seasons: Season[]
-    seriesId: number;
+    seriesId: string;
 }

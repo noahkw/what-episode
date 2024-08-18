@@ -1,10 +1,11 @@
-import {Season as ISeason} from '../models/series'
+import {Season as ISeason, Series} from '../models/series'
 import {useContext} from "react"
 import {SeriesContext} from "../context/series.context.ts";
+import {EditableSpan} from "./EditableSpan.tsx";
 
 interface SeasonProps {
     season: ISeason
-    seriesId: number
+    seriesId: Series["seriesId"]
 }
 
 export function Season({season, seriesId}: SeasonProps) {
@@ -39,9 +40,22 @@ export function Season({season, seriesId}: SeasonProps) {
         return season.currentEpisode == null || season.currentEpisode === 0;
     }
 
+    function setEpisodeCount(episodeCount: number) {
+        dispatchSeries({
+            type: "updateSeason",
+            seriesId: seriesId,
+            season: {
+                ...season,
+                episodeCount,
+            }
+        })
+    }
+
     return (
         <div className="season">
-            <span>I am season with {season.episodeCount} episodes</span>
+            <span>I am a season with episodes</span>
+            <EditableSpan initialValue={season.episodeCount} onValueChange={setEpisodeCount} parseValue={(value: string) => Number.parseInt(value)} />
+            <span>episodes</span>
             <span>You have watched {season.currentEpisode ?? 0} episodes</span>
             <button disabled={disableIncrementButton()} onClick={incrementCurrentEpisode}>+</button>
             <button disabled={disableDecrementButton()} onClick={decrementCurrentEpisode}>-</button>

@@ -6,27 +6,29 @@ import {useEffect, useReducer} from "react";
 import {seriesReducer} from "./reducers/series.reducer.ts";
 import {SeriesContext} from "./context/series.context.ts";
 import {useLocalStorage} from "./hooks/local-storage.hook.ts";
+import {AddSeries} from "./components/AddSeries.tsx";
 
 function App() {
     const [initialSeries, persistSeries] = useLocalStorage<ISeries[]>("series", []);
 
-    const [series, dispatchSeries] = useReducer(seriesReducer, {
+    const [seriesState, dispatchSeries] = useReducer(seriesReducer, {
         series: initialSeries,
     })
 
     useEffect(() => {
-        persistSeries(series.series)
-    }, [series])
+        persistSeries(seriesState.series)
+    }, [persistSeries, seriesState.series])
 
     return (
         <div className="App">
             <header className="header">
                 <img src={logo} className="logo" alt="logo"/>
+                <AddSeries dispatchSeries={dispatchSeries} />
                 <div>My Series</div>
                 <div>
                     Total episodes watched:
                     {
-                        series.series.reduce((prev, cur) => {
+                        seriesState.series.reduce((prev, cur) => {
                             return prev + cur.seasons.reduce((prev, cur) => {
                                 return prev + (cur.currentEpisode ?? 0)
                             }, 0)
@@ -36,7 +38,7 @@ function App() {
 
                 <SeriesContext.Provider value={{dispatchSeries}}>
                     {
-                        series.series.map((s: ISeries) =>
+                        seriesState.series.map((s: ISeries) =>
                             <Series key={s.seriesId} series={s}></Series>)
                     }
                 </SeriesContext.Provider>
