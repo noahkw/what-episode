@@ -25,6 +25,19 @@ interface AddSeriesProps {
   dispatchSeries: Dispatch<SeriesAction>
 }
 
+async function fetchThing<T>(
+  url: string,
+  options: RequestInit = {},
+): Promise<T> {
+  const response = await fetch(url, options)
+
+  if (!response.ok) {
+    throw new Error("fetch failed; url: " + url)
+  }
+
+  return (await response.json()) as T
+}
+
 export function AddSeries({ dispatchSeries }: AddSeriesProps) {
   const [query, setQuery] = useState("")
   const [shows, setShows] = useState<TVShowResult[]>([])
@@ -36,7 +49,7 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
       if (query.trim()) {
         void fetchShows()
       }
-    }, 2000)
+    }, 1000)
 
     return () => {
       clearTimeout(handler)
@@ -45,18 +58,14 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
 
   const fetchShows = async () => {
     setIsLoading(true)
-    setError(false)
+
     try {
-      const response = await fetch(
+      const shows = await fetchThing<TVShowResult[]>(
         `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`,
       )
-      if (!response.ok) {
-        throw new Error("Network response was not ok")
-      }
-      const data = (await response.json()) as TVShowResult[]
-      setShows(data)
-    } catch (error: unknown) {
-      console.warn(error)
+      setShows(shows)
+    } catch (e) {
+      console.warn(e)
       setError(true)
     } finally {
       setIsLoading(false)
@@ -65,15 +74,11 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
 
   const fetchSeasons = async (show: TVShowResult) => {
     setIsLoading(true)
-    setError(false)
+
     try {
-      const response = await fetch(
+      return await fetchThing<SeasonResult[]>(
         `https://api.tvmaze.com/shows/${show.show.id.toString()}/seasons`,
       )
-      if (!response.ok) {
-        throw new Error("Network response was not ok")
-      }
-      return (await response.json()) as SeasonResult[]
     } catch (error: unknown) {
       console.warn(error)
       setError(true)
