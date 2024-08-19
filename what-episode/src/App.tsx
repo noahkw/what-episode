@@ -7,8 +7,11 @@ import { seriesReducer } from "./reducers/series.reducer.ts"
 import { SeriesContext } from "./context/series.context.ts"
 import { useLocalStorage } from "./hooks/local-storage.hook.ts"
 import { AddSeries } from "./components/AddSeries.tsx"
+import { Toaster } from "react-hot-toast"
 
 function App() {
+  const [_, forceUpdate] = useReducer((x: number) => x + 1, 0)
+
   const [initialSeries, persistSeries] = useLocalStorage<ISeries[]>(
     "series",
     [],
@@ -23,34 +26,41 @@ function App() {
   }, [persistSeries, seriesState.series])
 
   return (
-    <div className="App h-screen overflow-hidden">
-      <header className="flex flex-row header bg-primary-content px-10 items-center">
-        <img src={logo} className="logo" alt="logo" />
-        <h1 className="h-full text-2xl hidden md:block">What Episode?!</h1>
-        <div className="flex-1"></div>
-        <div className="add-series-container ">
-          <AddSeries dispatchSeries={dispatchSeries} />
-        </div>
-      </header>
-      <div className="bg-primary-content h-full">
-        <div className="flex flex-col gap-1 items-center h-full overflow-y-auto pb-32">
-          Total episodes watched:
-          {seriesState.series.reduce((prev, cur) => {
-            return (
-              prev +
-              cur.seasons.reduce((prev, cur) => {
-                return prev + (cur.currentEpisode ?? 0)
-              }, 0)
-            )
-          }, 0)}
-          <SeriesContext.Provider value={{ dispatchSeries }}>
-            {seriesState.series.map((s: ISeries) => (
-              <Series key={s.seriesId} series={s}></Series>
-            ))}
-          </SeriesContext.Provider>
+    <>
+      <Toaster position="bottom-center" />
+      <div className="App h-screen overflow-hidden">
+        <header className="flex flex-row header bg-primary-content px-10 items-center">
+          <img src={logo} className="logo" alt="logo" />
+          <h1 className="h-full text-2xl hidden md:block">What Episode?!</h1>
+          <div className="flex-1"></div>
+          <div className="add-series-container ">
+            <AddSeries dispatchSeries={dispatchSeries} />
+          </div>
+        </header>
+        <div className="bg-primary-content h-full">
+          <div className="flex flex-col gap-1 items-center h-full overflow-y-auto pb-32">
+            Total episodes watched:
+            {seriesState.series.reduce((prev, cur) => {
+              return (
+                prev +
+                cur.seasons.reduce((prev, cur) => {
+                  return prev + cur.currentEpisode
+                }, 0)
+              )
+            }, 0)}
+            <SeriesContext.Provider value={{ dispatchSeries }}>
+              {seriesState.series.map((s: ISeries) => (
+                <Series
+                  key={s.seriesId}
+                  series={s}
+                  forceUpdate={forceUpdate}
+                ></Series>
+              ))}
+            </SeriesContext.Provider>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

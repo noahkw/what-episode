@@ -1,0 +1,14 @@
+
+@keyframes toast-leave-animation {
+    0% {
+        opacity: 1;
+        transform: none;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+}
