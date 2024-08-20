@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons"
 import React from "react"
 import toast, { Toast } from "react-hot-toast"
+import { UndoToast } from "./UndoToast.tsx"
 
 interface ConfirmationButtonProps {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -48,37 +49,28 @@ export function UndoableButton({
     toast.custom(
       (t: Toast) => {
         return (
-          <div className={t.visible ? "" : "toast-leave"}>
-            <div className="alert alert-error">
-              <span>{undoMessage}</span>
-              <progress
-                className="progress w-56"
-                value={currentMillis}
-                max={timeout}
-              ></progress>
-              <button
-                className="btn btn-md"
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                  event.stopPropagation()
-                  toast.dismiss(t.id)
+          <UndoToast
+            currentMillis={currentMillis}
+            timeout={timeout}
+            onUndoClicked={(event: React.MouseEvent<HTMLButtonElement>) => {
+              event.stopPropagation()
+              toast.dismiss(t.id)
 
-                  if (timeoutId) {
-                    clearTimeout(timeoutId)
-                  }
+              if (timeoutId) {
+                clearTimeout(timeoutId)
+              }
 
-                  if (intervalId) {
-                    clearInterval(intervalId)
-                  }
+              if (intervalId) {
+                clearInterval(intervalId)
+              }
 
-                  if (undoCallback) {
-                    undoCallback()
-                  }
-                }}
-              >
-                Undo
-              </button>
-            </div>
-          </div>
+              if (undoCallback) {
+                undoCallback()
+              }
+            }}
+            toast={t}
+            undoMessage={undoMessage}
+          ></UndoToast>
         )
       },
       { duration: timeout, id: toastId },
