@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent, ChangeEvent } from "react"
+import { ChangeEvent, FocusEvent, KeyboardEvent, useState } from "react"
 
 interface EditableSpanProps<T> {
   initialValue: T
@@ -31,6 +31,17 @@ export function EditableSpan<T extends { toString: () => string }>({
     setValue(event.target.value)
   }
 
+  const handleBlur = (event: FocusEvent<HTMLInputElement>): void => {
+    setIsEditing(false)
+    if (onValueChange) {
+      onValueChange(parseValue(event.currentTarget.value))
+    }
+  }
+
+  const handleFocus = (event: FocusEvent<HTMLInputElement>): void => {
+    event.currentTarget.select()
+  }
+
   return isEditing ? (
     <input
       className="outline-none bg-0 px-1 w-8 border-0 border-b-1"
@@ -38,9 +49,8 @@ export function EditableSpan<T extends { toString: () => string }>({
       value={value}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
-      onBlur={() => {
-        setIsEditing(false)
-      }}
+      onBlur={handleBlur}
+      onFocus={handleFocus}
       autoFocus
     />
   ) : (

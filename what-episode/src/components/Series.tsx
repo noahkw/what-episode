@@ -70,7 +70,7 @@ export function Series({
           <figure className="lg:col-span-1 md:col-span-2 col-span-3 h-32 items-center rounded-l-lg">
             <img
               className="h-full"
-              src={series.imageUrl ?? "https://placehold.co/180x320"}
+              src={series.imageUrl ?? "https://placehold.co/228x320"}
               alt={series.title}
             />
           </figure>
@@ -81,7 +81,13 @@ export function Series({
             </span>
           </div>
           <div className="card-actions justify-end col-span-2 w-full pr-1">
-            <button className="btn btn-primary btn-icon" onClick={addSeason}>
+            <button
+              className="btn btn-primary btn-icon"
+              onClick={e => {
+                e.stopPropagation()
+                addSeason()
+              }}
+            >
               <FontAwesomeIcon icon={faPlus} />
             </button>
             <UndoableButton
@@ -94,7 +100,7 @@ export function Series({
               undoCallback={() => {
                 setIsBeingDeleted(false)
               }}
-              undoMessage={`Series ${series.title} is being deleted...`}
+              undoMessage={`Series ${series.title} has been deleted...`}
               forceUpdate={forceUpdate}
             />
           </div>
