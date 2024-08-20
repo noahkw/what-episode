@@ -38,6 +38,8 @@ async function fetchThing<T>(
   return (await response.json()) as T
 }
 
+const DEBOUNCE_TIMEOUT = 1000
+
 export function AddSeries({ dispatchSeries }: AddSeriesProps) {
   const [query, setQuery] = useState("")
   const [shows, setShows] = useState<TVShowResult[]>([])
@@ -49,7 +51,7 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
       if (query.trim()) {
         void fetchShows()
       }
-    }, 1000)
+    }, DEBOUNCE_TIMEOUT)
 
     return () => {
       clearTimeout(handler)
@@ -140,28 +142,37 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
     <div>
       <form className="input-group" onSubmit={onSubmit}>
         <Combobox
+          className="w-40 sm:w-52 inline-block"
           busy={isLoading}
           data={shows}
           value={query}
           filter={() => true}
           onChange={value => {
             if (typeof value === "string") {
+              setIsLoading(true)
               setQuery(value)
             } else {
               void setShow(value.show.id)
             }
           }}
           renderListItem={({ item }) => (
-            <span>
-              {item.show.name} ({item.show.premiered?.substring(0, 4) ?? "N/A"})
-            </span>
+            <div className="flex gap-2">
+              <img
+                src={item.show.image.medium}
+                alt={item.show.name}
+                className="h-full w-8"
+              ></img>
+              <span>
+                {item.show.name} (
+                {item.show.premiered?.substring(0, 4) ?? "N/A"})
+              </span>
+            </div>
           )}
         ></Combobox>
         <button className="btn btn-primary btn-sm" type="submit">
           Add
         </button>
       </form>
-      {isLoading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
     </div>
   )

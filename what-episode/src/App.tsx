@@ -26,8 +26,8 @@ function App() {
   return (
     <>
       <Toaster position="bottom-center" />
-      <div className="App h-screen overflow-hidden">
-        <header className="flex flex-row header bg-primary-content px-10 items-center">
+      <div className="App px-4 bg-primary-content h-screen overflow-hidden">
+        <header className="flex flex-row header bg-primary-content items-center">
           <img src={logo} className="logo" alt="logo" />
           <h1 className="h-full text-2xl hidden md:block">What Episode?!</h1>
           <div className="flex-1"></div>

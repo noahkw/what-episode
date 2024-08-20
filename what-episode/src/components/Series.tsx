@@ -54,7 +54,7 @@ export function Series({ series }: { series: ISeries }) {
 
   return (
     !isBeingDeleted && (
-      <div className="card bg-base-100 w-11/12 shadow-xl rounded-lg">
+      <div className="card bg-base-100 w-full shadow-xl rounded-lg">
         <div
           onClick={() => {
             setIsExpanded(!isExpanded)
