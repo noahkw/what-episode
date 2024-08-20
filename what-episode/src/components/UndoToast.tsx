@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Toast } from "react-hot-toast"
 
 interface UndoToastProps {
-  currentMillis: number
+  rerenderInterval: number
   timeout: number
   onUndoClicked: (event: React.MouseEvent<HTMLButtonElement>) => void
   toast: Toast
@@ -14,8 +14,20 @@ export function UndoToast({
   undoMessage,
   onUndoClicked,
   timeout,
-  currentMillis,
+  rerenderInterval,
 }: UndoToastProps) {
+  const [currentMillis, setCurrentMillis] = useState(0)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setCurrentMillis(currentMillis + rerenderInterval)
+    }, rerenderInterval)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [currentMillis])
+
   return (
     <div className={toast.visible ? "" : "toast-leave"}>
       <div className="alert alert-error">
@@ -25,7 +37,12 @@ export function UndoToast({
           value={currentMillis}
           max={timeout}
         ></progress>
-        <button className="btn btn-md" onClick={onUndoClicked}>
+        <button
+          className="btn btn-md"
+          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+            onUndoClicked(event)
+          }}
+        >
           Undo
         </button>
       </div>

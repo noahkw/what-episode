@@ -11,7 +11,6 @@ interface ConfirmationButtonProps {
   timeout: number
   undoMessage: string
   callback: () => void
-  forceUpdate: () => void
 }
 
 const RERENDER_INTERVAL = 1000
@@ -23,7 +22,6 @@ export function UndoableButton({
   onClick,
   undoCallback,
   callback,
-  forceUpdate,
 }: ConfirmationButtonProps) {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
@@ -39,18 +37,11 @@ export function UndoableButton({
       callback()
     }, timeout)
 
-    let currentMillis = 0
-
-    const intervalId = setInterval(() => {
-      currentMillis += RERENDER_INTERVAL
-      forceUpdate()
-    }, RERENDER_INTERVAL)
-
     toast.custom(
       (t: Toast) => {
         return (
           <UndoToast
-            currentMillis={currentMillis}
+            rerenderInterval={RERENDER_INTERVAL}
             timeout={timeout}
             onUndoClicked={(event: React.MouseEvent<HTMLButtonElement>) => {
               event.stopPropagation()
@@ -58,10 +49,6 @@ export function UndoableButton({
 
               if (timeoutId) {
                 clearTimeout(timeoutId)
-              }
-
-              if (intervalId) {
-                clearInterval(intervalId)
               }
 
               if (undoCallback) {

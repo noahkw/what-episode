@@ -9,13 +9,7 @@ import { UndoableButton } from "./UndoableButton.tsx"
 
 const UNDO_DELAY = 5000
 
-export function Series({
-  series,
-  forceUpdate,
-}: {
-  series: ISeries
-  forceUpdate: () => void
-}) {
+export function Series({ series }: { series: ISeries }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const { dispatchSeries } = useContext(SeriesContext)
   const [isBeingDeleted, setIsBeingDeleted] = useState(false)
@@ -101,7 +95,6 @@ export function Series({
                 setIsBeingDeleted(false)
               }}
               undoMessage={`Series ${series.title} has been deleted...`}
-              forceUpdate={forceUpdate}
             />
           </div>
         </div>

@@ -10,8 +10,6 @@ import { AddSeries } from "./components/AddSeries.tsx"
 import { Toaster } from "react-hot-toast"
 
 function App() {
-  const [_, forceUpdate] = useReducer((x: number) => x + 1, 0)
-
   const [initialSeries, persistSeries] = useLocalStorage<ISeries[]>(
     "series",
     [],
@@ -50,11 +48,7 @@ function App() {
             }, 0)}
             <SeriesContext.Provider value={{ dispatchSeries }}>
               {seriesState.series.map((s: ISeries) => (
-                <Series
-                  key={s.seriesId}
-                  series={s}
-                  forceUpdate={forceUpdate}
-                ></Series>
+                <Series key={s.seriesId} series={s}></Series>
               ))}
             </SeriesContext.Provider>
           </div>
