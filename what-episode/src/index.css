@@ -4,19 +4,19 @@
 @tailwind components;
 @tailwind utilities;
 
-.input-group {
-    :first-child {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
+.input-group > *:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
 
-        :focus {
+.input-group > *:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
 
-        }
-    }
-
-    :last-child {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
+.combobox {
+    .rw-widget-picker {
+        border-radius: var(--rounded-btn, 0.5rem) 0 0 var(--rounded-btn, 0.5rem);
     }
 }
 

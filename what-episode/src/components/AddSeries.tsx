@@ -11,7 +11,7 @@ interface TVShowResult {
     id: number
     name: string
     premiered: string | null
-    image: ImageResult
+    image?: ImageResult
   }
 }
 
@@ -124,7 +124,7 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
         type: "create",
         series: {
           title: show.show.name,
-          imageUrl: show.show.image.medium,
+          imageUrl: show.show.image?.medium ?? null,
           seriesId: crypto.randomUUID(),
           seasons: seasons.map(season => ({
             seasonId: season.id.toString(),
@@ -142,7 +142,7 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
     <div>
       <form className="input-group" onSubmit={onSubmit}>
         <Combobox
-          className="w-40 sm:w-52 inline-block"
+          className="w-40 sm:w-72 inline-block combobox"
           busy={isLoading}
           data={shows}
           value={query}
@@ -158,7 +158,7 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
           renderListItem={({ item }) => (
             <div className="flex gap-2">
               <img
-                src={item.show.image.medium}
+                src={item.show.image?.medium ?? "https://placehold.co/228x320"}
                 alt={item.show.name}
                 className="h-full w-8"
               ></img>
@@ -169,7 +169,7 @@ export function AddSeries({ dispatchSeries }: AddSeriesProps) {
             </div>
           )}
         ></Combobox>
-        <button className="btn btn-primary btn-sm" type="submit">
+        <button className="btn btn-primary btn-sm h-10 align-top" type="submit">
           Add
         </button>
       </form>
